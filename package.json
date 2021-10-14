@@ -1,0 +1,19 @@
+{
+  "name": "api-guide-example",
+  "version": "1.0.0",
+  "description": "Example code for building your own Ethereum smart contract API made with Express.js and Infura.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "swagger-ui-express": "^4.1.6",
+    "web3": "^1.6.0"
+  }
+}

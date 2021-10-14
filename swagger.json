@@ -1,0 +1,253 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0", 
+      "title": "BrightUnion Distributors Protocol API",
+      "description": "BrightUnion Protocol Test http API",
+      "license": {
+        "name": "MIT",
+        "url": "https://opensource.org/licenses/MIT"
+      }
+    },
+    "host": "localhost:8000",
+    "schemes": ["http"],
+    "consumes": ["application/json"],
+    "produces": ["application/json"],
+
+    "paths": {
+   
+      "/v1/brightUnion/getCovers": {
+        "post": {
+          "tags": [
+            {
+              "name": "Protocol"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "cover",
+              "in": "body",
+              "description": "Distributor's name",
+              "schema": {
+                "$ref": "#/definitions/coverParams"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Get all owner's covers ",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Cover"
+              }
+            }
+          }
+        }
+      },
+      "/v1/brightUnion/getCoverQuote": {
+        "post": {
+          "tags": [
+            {
+              "name": "Protocol"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "cover",
+              "in": "body",
+              "description": "GetCover Quote",
+              "schema": {
+                "$ref": "#/definitions/coverParams"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Get cover from specified distributor",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/Cover"
+              }
+            }
+          }
+        }
+      },
+       "/v1/brightUnion/buyCover": {
+        "post": {
+          "tags": [
+            {
+              "name": "Protocol"
+            }
+          ],
+          "parameters": [
+            {
+              "name": "buyCoverParams",
+              "in": "body",
+              "description": "Buy cover!",
+              "schema": {
+                "$ref": "#/definitions/buyCoverParams"
+              }
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Get cover from specified distributor",
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/buyCoverParams"
+              }
+            }
+          }
+        }
+      },
+      "/v1/insurace/getInsuraceCatalog": {
+        "get": {
+          "tags": [
+            {
+              "name": "Insurace"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Get all available covers from Insurace",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/v1/insurace/getCoverPremium": {
+        "post": {
+          "tags": [
+            {
+              "name": "Insurace"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary": "Get Cover Premium",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/v1/insurace/confirmCoverPremium": {
+        "post": {
+          "tags": [
+            {
+              "name": "Insurace"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary":  "Confirm Cover Premium",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/v1/nexus/getNexusCovers": {
+        "post": {
+          "tags": [
+            {
+              "name": "Nexus"
+            }
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "summary":  "Get Nexus Cover ",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      }
+    } ,
+"definitions": {
+      "coverParams": {
+        "required": [
+          "DistributorName",
+          "OwnerAddress",
+          "ActiveCover"
+        ],
+        "properties": {
+          "DistributorName": {
+            "type": "string",
+            "uniqueItems": true
+          },
+          "OwnerAddress": {
+            "type": "string"
+          },
+          "ActiveCover":{
+            "type": "boolean"
+          }
+        }
+      },
+      "buyCoverParams":{
+        "properties": {
+          "DistributorName": {
+            "type": "string"
+          }, 
+          "productAddress": {
+            "type": "string"
+          }, 
+          "secondsDuration": {
+            "type": "integer"
+          },
+          "coverTokens": {
+            "type": "integer"
+          }
+        }
+      },
+      "Cover": {
+        "properties": {
+          "coverId": {
+            "type": "integer"
+          }, 
+          "coverType": {
+            "type": "string"
+          },
+          "productId": {
+            "type": "integer"
+          },
+          "coverAmount": {
+            "type": "integer"
+          },
+          "premium": {
+            "type": "integer"
+          }, 
+          "currency": {
+            "type": "string"
+          },
+          "contractAddress": {
+            "type": "string"
+          },
+          "expiration": {
+            "type": "integer"
+          },
+          "status": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+}
