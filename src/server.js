@@ -15,8 +15,8 @@
   const DistributorsABI = require( '../abi/Distributors.json');
   const swaggerDocument = require('../swagger.json');
   const walletPrivateKey = process.env.PRIVATE_KEY;
-  const web3_rinkeby = new Web3(`https://rinkeby.infura.io/v3/98d7e501879243c5877bac07a57cde7e`);
-  const web3_kovan = new Web3(`https://kovan.infura.io/v3/98d7e501879243c5877bac07a57cde7e`);
+  const web3_rinkeby = new Web3(`https://rinkeby.infura.io/v3/${process.env.PROJECT_ID}`);
+  const web3_kovan = new Web3(`https://kovan.infura.io/v3/${process.env.PROJECT_ID}`);
   
   web3_rinkeby.eth.accounts.wallet.add(walletPrivateKey);
   web3_kovan.eth.accounts.wallet.add(walletPrivateKey);
