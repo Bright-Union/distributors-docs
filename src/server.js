@@ -4,6 +4,7 @@
   const bodyParser = require('body-parser');
   const Web3 = require('web3');
   const swaggerUi = require('swagger-ui-express');
+  const cors = require('cors');
 
   const { 
     getInsuraceCovers,
@@ -35,7 +36,8 @@
     }
   
   const app = express();
-  const port = 8000;
+  app.use(cors());
+  const port = 80;
   app.use(
     '/api-docs',
     swaggerUi.serve, 
@@ -43,7 +45,12 @@
     swaggerUi.serve, 
     swaggerUi.setup(swaggerDocument)
   );
-  
+  const issue2options = {
+    origin: true,
+    methods: ["POST","GET"],
+    credentials: true,
+    maxAge: 3600
+  };
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -54,7 +61,7 @@
  */
 
 
-app.route('/v1/brightUnion/getCovers').post((req, res) => { 
+app.route('/v1/brightUnion/getCovers', cors(issue2options)).post((req, res) => { 
     let {DistributorName,OwnerAddress,ActiveCover,limit = 20, covers=[], coverFormat=[]} = req.body;
 
     getDistributorsContract(DistributorName)

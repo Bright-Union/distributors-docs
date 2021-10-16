@@ -109,7 +109,7 @@
           }
         }
       },
-      "/v1/insurace/getInsuraceCatalog": {
+      "/v1/insurace/getCoverCatalog": {
         "get": {
           "tags": [
             {
