@@ -39,7 +39,7 @@
   app.use(cors());
   const port = 80;
   app.use(
-    '/api-docs',
+    '/',
     swaggerUi.serve, 
     swaggerUi.serve, 
     swaggerUi.serve, 
