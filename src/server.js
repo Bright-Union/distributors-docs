@@ -39,12 +39,13 @@
   app.use(cors());
   const port = 80;
   app.use(
-    '/',
+    '/api-admin',
     swaggerUi.serve, 
     swaggerUi.serve, 
     swaggerUi.serve, 
     swaggerUi.setup(swaggerDocument)
   );
+
   const issue2options = {
     origin: true,
     methods: ["POST","GET"],
