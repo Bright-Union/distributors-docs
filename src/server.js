@@ -24,7 +24,8 @@
 
   const myWalletAddress = web3_kovan.eth.accounts.wallet[0].address;
   
-  const distAddress_rinkeby = '0x9E8412DFcB3F9750B05a8583C234A130D8e7df25';
+
+  const distAddress_rinkeby = '0x957Bec5094a18d99A8cD8DBef705edCA8c31c90a';
   const distAddress_kovan = '0xC3346d88d34d4458FEC83dFA111Ea780d1bd0c0D';
   
   
@@ -37,13 +38,14 @@
   
   const app = express();
   app.use(cors());
-  const port = 80;
+  const port = 8000;
+
   app.use(
-    '/api-admin',
-    swaggerUi.serve, 
-    swaggerUi.serve, 
-    swaggerUi.serve, 
-    swaggerUi.setup(swaggerDocument)
+      '/api-docs',
+      swaggerUi.serve, 
+      swaggerUi.serve, 
+      swaggerUi.serve, 
+      swaggerUi.setup(swaggerDocument)
   );
 
   const issue2options = {
@@ -80,7 +82,7 @@ app.route('/v1/brightUnion/getCovers', cors(issue2options)).post((req, res) => {
                       _cover.premium = cover[5]
                       coverFormat.push(_cover);
                   });
-                  return res.send(covers);
+                  return res.send(coverFormat);
           }).catch((error) => {
             console.error('[protocol-balance] error:', error);
             return res.sendStatus(400);
