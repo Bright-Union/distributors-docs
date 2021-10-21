@@ -5,7 +5,7 @@
   const Web3 = require('web3');
   const swaggerUi = require('swagger-ui-express');
   const cors = require('cors');
-  const {_formatCoverResponse} = require('./@brightunion/sdk')
+  const {_formatCoverResponse, _getDistributorsContract} = require('./@brightunion/sdk')
 
   const { 
     getInsuraceCovers,
@@ -31,12 +31,7 @@
   const testAddress = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
   
   
-  const getDistributorsContract = (distName) => {
-      if(distName === 'nexus'){
-          return  new  web3_kovan.eth.Contract(DistributorsABI.abi, distAddress_kovan);
-       }
-      return   new  web3_rinkeby.eth.Contract(DistributorsABI.abi, distAddress_rinkeby);
-    }
+
   
   const app = express();
   app.use(cors());
@@ -50,31 +45,30 @@
  * 
  *       BU PROTOCOL 
  */
-
-
 app.route('/v1/brightUnion/getCovers').post((req, res) => { 
     let {DistributorName,OwnerAddress,ActiveCover,limit = 20, covers=[], coverFormat=[]} = req.body;
-    getDistributorsContract('insurace')
+    _getDistributorsContract('insurace')
       .methods.getCovers('insurace',testAddress,true,limit).call()
         .then((covers)  => { 
           coverFormat = coverFormat.concat(_formatCoverResponse('insurace','rinkeby',covers)) })
      
       .then(() => { 
-        getDistributorsContract('bridge').methods.getCovers('bridge',testAddress,false,limit).call()
+        _getDistributorsContract('bridge').methods.getCovers('bridge',testAddress,false,limit).call()
            .then((covers)  => { 
               coverFormat = coverFormat.concat(_formatCoverResponse('bridge','rinkeby',covers)) })
                
-              .then(() => { getDistributorsContract('nexus')
-                .methods.getCovers('nexus',testAddress,false,limit).call()
+              .then(() => { 
+                _getDistributorsContract('nexus').methods.getCovers('nexus',testAddress,false,limit).call()
                  .then((covers)  => { 
                    coverFormat = coverFormat.concat(_formatCoverResponse('nexus','kovan',covers)) })
                    
-                   .then(()=>{ return res.send(coverFormat)  })  })
+                   .then(()=>{ return res.send(coverFormat)  })  });
+
           }).catch((error) => {
             console.error('[protocol-balance] error:', error);
             return res.sendStatus(400);
       });
- });
+});
 
  app.route('/v1/brightUnion/getCoverQuote').post((req, res) => { 
       let {

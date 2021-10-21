@@ -40,7 +40,14 @@ const _formatCoverResponse = (_distributorName,_chainId,_covers) => {
     return coverFormat;
   }
 
+  const _getDistributorsContract = (distName) => {
+    if(distName === 'nexus'){
+        return  new  web3_kovan.eth.Contract(DistributorsABI.abi, distAddress_kovan);
+     }
+    return   new  web3_rinkeby.eth.Contract(DistributorsABI.abi, distAddress_rinkeby);
+  }
   module.exports = {
       _formatCoverResponse,
+      _getDistributorsContract,
       _getDistributorsContract
     };
