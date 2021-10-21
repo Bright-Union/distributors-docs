@@ -9,7 +9,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:8000",
+  "host": "api.brightunion.io",
   "schemes": ["http"],
   "consumes": ["application/json"],
   "produces": ["application/json"],
