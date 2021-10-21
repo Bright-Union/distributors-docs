@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0", 
-    "title": "BrightUnion Distributors Protocol API",
+    "title": "BrightUnion Distributors Protocol",
     "description": "BrightUnion Protocol Test http API",
     "license": {
       "name": "MIT",
@@ -15,7 +15,7 @@
   "produces": ["application/json"],
 
   "paths": {
-    "/v1/brightUnion/getCovers": {
+    "/v1/protocol/getCovers": {
       "post": {
         "tags": [
           {
@@ -37,7 +37,7 @@
         }
       }
     },
-    "/v1/brightUnion/getCoverQuote": {
+    "/v1/protocol/getCoverQuote": {
       "post": {
         "tags": [
           {
@@ -68,7 +68,7 @@
         }
       }
     },
-     "/v1/brightUnion/buyCover": {
+     "/v1/protocol/buyCover": {
       "post": {
         "tags": [
           {
@@ -99,71 +99,17 @@
         }
       }
     },
-    "/v1/insurace/getCoverCatalog": {
+    "/v1/protocol/getCoverCatalog": {
       "get": {
         "tags": [
           {
-            "name": "Insurace"
+            "name": "Protocol"
           }
         ],
         "produces": [
           "application/json"
         ],
-        "summary": "Get all available covers from Insurace",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/v1/insurace/getCoverPremium": {
-      "post": {
-        "tags": [
-          {
-            "name": "Insurace"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary": "Get Cover Premium",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/v1/insurace/confirmCoverPremium": {
-      "post": {
-        "tags": [
-          {
-            "name": "Insurace"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary":  "Confirm Cover Premium",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/v1/nexus/getNexusCovers": {
-      "post": {
-        "tags": [
-          {
-            "name": "Nexus"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary":  "Get Nexus Cover ",
+        "summary": "Get all available covers from Bright Union distributors",
         "responses": {
           "200": {
             "description": "OK"

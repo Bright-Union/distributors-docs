@@ -19,7 +19,7 @@
   const app = express();
   app.use(cors());
   const port = 8000;
-  app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+  app.use('/protocol/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -28,7 +28,7 @@
  * 
  *       BU PROTOCOL 
  */
-app.route('/v1/brightUnion/getCovers').post((req, res) => { 
+app.route('/v1/protocol/getCovers').post((req, res) => { 
     let {DistributorName,OwnerAddress,ActiveCover,limit = 20, covers=[], coverFormat=[]} = req.body;
     _getDistributorsContract('insurace')
       .methods.getCovers('insurace',testAddress,true,limit).call()
@@ -53,7 +53,7 @@ app.route('/v1/brightUnion/getCovers').post((req, res) => {
       });
 });
 
- app.route('/v1/brightUnion/getCoverQuote').post((req, res) => { 
+ app.route('/v1/protocol/getCoverQuote').post((req, res) => { 
       let {
         _distributorName,
         _interfaceCompliant1,
@@ -98,7 +98,7 @@ app.route('/v1/brightUnion/getCovers').post((req, res) => {
             });;
   });
       
- app.route('/v1/brightUnion/buyCover').post((req, res) => { 
+ app.route('/v1/protocol/buyCover').post((req, res) => { 
 
         let { 
           DistributorName,
@@ -187,25 +187,31 @@ app.route('/v1/brightUnion/getCovers').post((req, res) => {
 
 
 
-/**
- * 
- *        INSURACE 
- */
-
-
-
-app.route('/v1/insurace/getCoverCatalog').get((req, res) => {
-      new Promise( async resolve => {
-          const covers = await getInsuraceCovers();
+app.route('/v1/protocol/getCoverCatalog').get((req, res) => {
+  let formatCovers = [];
+      new Promise(async resolve => {
+          const covers = await getInsuraceCovers(); // insurace
           resolve(covers);
-        }).then((result) => {
-          return res.send(result);
+        }).then((insruaceCovers) => {
+          formatCovers = formatCovers.concat(insruaceCovers);
+        }).then(async () => {
+          new Promise(async resolve => {
+            const covers = await getNexusCovers(); // nexus
+            resolve(covers);
+        }).then((nexusCovers) => {
+          formatCovers = formatCovers.concat(nexusCovers);
+          return res.send(formatCovers);
         }).catch((error) => {
           console.error('[getRegistry] error:', error);
           return res.sendStatus(400);
         });
-    });
-  
+  });
+});
+
+/**
+ * 
+ *        INSURACE 
+ */  
 app.route('/v1/insurace/getCoverPremium').post((req, res) => {
       new Promise( async resolve => {
           const covers = await getCoverPremium();
