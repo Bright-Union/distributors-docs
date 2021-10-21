@@ -1,15 +1,19 @@
+require('dotenv').config()
 const DistributorsABI = require( '../../../abi/Distributors.json');
+const walletPrivateKey = process.env.PRIVATE_KEY;
+const Web3 = require('web3');
 
-/**
- * @summary  Returns a formatted array of covers
- * @readonly web3 read tx
- * @param    String : Distributor Name
- * @param    Array of non-formatted covers "protocol's response"
- * @returns  Array of formatted covers
- */
-const getContract = (address, web3) =>  new web3.eth.Contract(abi.abi, address);
+const web3_rinkeby = new Web3(`https://rinkeby.infura.io/v3/${process.env.PROJECT_ID}`);
+const web3_kovan = new Web3(`https://kovan.infura.io/v3/${process.env.PROJECT_ID}`);
 
-const _getDistributorsContract = (address, web3) => getContract(DistributorsABI, address, web3);
+web3_rinkeby.eth.accounts.wallet.add(walletPrivateKey);
+web3_kovan.eth.accounts.wallet.add(walletPrivateKey);
+
+const myWalletAddress = web3_kovan.eth.accounts.wallet[0].address;
+
+
+const distAddress_rinkeby = '0x957Bec5094a18d99A8cD8DBef705edCA8c31c90a';
+const distAddress_kovan = '0xC3346d88d34d4458FEC83dFA111Ea780d1bd0c0D';
 
 
 /**
@@ -39,6 +43,9 @@ const _formatCoverResponse = (_distributorName,_chainId,_covers) => {
     });
     return coverFormat;
   }
+
+
+  
 
   const _getDistributorsContract = (distName) => {
     if(distName === 'nexus'){

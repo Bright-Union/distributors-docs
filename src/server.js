@@ -2,10 +2,12 @@
   require('dotenv').config()
   const express = require('express');
   const bodyParser = require('body-parser');
-  const Web3 = require('web3');
   const swaggerUi = require('swagger-ui-express');
   const cors = require('cors');
   const {_formatCoverResponse, _getDistributorsContract} = require('./@brightunion/sdk')
+  const swaggerDocument = require('../swagger.json');
+  const testAddress = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
+
 
   const { 
     getInsuraceCovers,
@@ -13,25 +15,6 @@
     getCoverPremium,
     confirmCoverPremium
   } = require('./api/integration');
-
-  const DistributorsABI = require( '../abi/Distributors.json');
-  const swaggerDocument = require('../swagger.json');
-  const walletPrivateKey = process.env.PRIVATE_KEY;
-  const web3_rinkeby = new Web3(`https://rinkeby.infura.io/v3/${process.env.PROJECT_ID}`);
-  const web3_kovan = new Web3(`https://kovan.infura.io/v3/${process.env.PROJECT_ID}`);
-  
-  web3_rinkeby.eth.accounts.wallet.add(walletPrivateKey);
-  web3_kovan.eth.accounts.wallet.add(walletPrivateKey);
-
-  const myWalletAddress = web3_kovan.eth.accounts.wallet[0].address;
-  
-
-  const distAddress_rinkeby = '0x957Bec5094a18d99A8cD8DBef705edCA8c31c90a';
-  const distAddress_kovan = '0xC3346d88d34d4458FEC83dFA111Ea780d1bd0c0D';
-  const testAddress = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
-  
-  
-
   
   const app = express();
   app.use(cors());
