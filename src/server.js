@@ -5,6 +5,7 @@
   const Web3 = require('web3');
   const swaggerUi = require('swagger-ui-express');
   const cors = require('cors');
+  const {_formatCoverResponse} = require('./@brightunion/sdk')
 
   const { 
     getInsuraceCovers,
@@ -27,6 +28,7 @@
 
   const distAddress_rinkeby = '0x957Bec5094a18d99A8cD8DBef705edCA8c31c90a';
   const distAddress_kovan = '0xC3346d88d34d4458FEC83dFA111Ea780d1bd0c0D';
+  const testAddress = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
   
   
   const getDistributorsContract = (distName) => {
@@ -39,21 +41,7 @@
   const app = express();
   app.use(cors());
   const port = 8000;
-
-  app.use(
-      '/api-docs',
-      swaggerUi.serve, 
-      swaggerUi.serve, 
-      swaggerUi.serve, 
-      swaggerUi.setup(swaggerDocument)
-  );
-
-  const issue2options = {
-    origin: true,
-    methods: ["POST","GET"],
-    credentials: true,
-    maxAge: 3600
-  };
+  app.use('/api-docs',swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -64,30 +52,29 @@
  */
 
 
-app.route('/v1/brightUnion/getCovers', cors(issue2options)).post((req, res) => { 
+app.route('/v1/brightUnion/getCovers').post((req, res) => { 
     let {DistributorName,OwnerAddress,ActiveCover,limit = 20, covers=[], coverFormat=[]} = req.body;
-
-    getDistributorsContract(DistributorName)
-            .methods.getCovers(DistributorName,OwnerAddress,ActiveCover,limit)
-            .call()
-    .then((covers)  => { 
-
-      covers.forEach(cover =>{
-                      _cover = {}
-                      _cover.coverId = cover[0],
-                      _cover.coverType = cover[1],
-                      _cover.productId = cover[3],
-                      _cover.contractName = cover[2],
-                      _cover.coverAmount = cover[4],
-                      _cover.premium = cover[5]
-                      coverFormat.push(_cover);
-                  });
-                  return res.send(coverFormat);
+    getDistributorsContract('insurace')
+      .methods.getCovers('insurace',testAddress,true,limit).call()
+        .then((covers)  => { 
+          coverFormat = coverFormat.concat(_formatCoverResponse('insurace','rinkeby',covers)) })
+     
+      .then(() => { 
+        getDistributorsContract('bridge').methods.getCovers('bridge',testAddress,false,limit).call()
+           .then((covers)  => { 
+              coverFormat = coverFormat.concat(_formatCoverResponse('bridge','rinkeby',covers)) })
+               
+              .then(() => { getDistributorsContract('nexus')
+                .methods.getCovers('nexus',testAddress,false,limit).call()
+                 .then((covers)  => { 
+                   coverFormat = coverFormat.concat(_formatCoverResponse('nexus','kovan',covers)) })
+                   
+                   .then(()=>{ return res.send(coverFormat)  })  })
           }).catch((error) => {
             console.error('[protocol-balance] error:', error);
             return res.sendStatus(400);
-          });;
       });
+ });
 
  app.route('/v1/brightUnion/getCoverQuote').post((req, res) => { 
       let {

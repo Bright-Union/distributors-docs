@@ -1,0 +1,30 @@
+
+        "parameters": [
+          {
+            "name": "cover",
+            "in": "body",
+            "description": "Distributor's name",
+            "schema": {
+              "$ref": "#/definitions/coverParams"
+            }
+          }
+        ],
+        "coverParams": {
+    "required": [
+      "DistributorName",
+      "OwnerAddress",
+      "ActiveCover"
+    ],
+    "properties": {
+      "DistributorName": {
+        "type": "string",
+        "uniqueItems": true
+      },
+      "OwnerAddress": {
+        "type": "string"
+      },
+      "ActiveCover":{
+        "type": "boolean"
+      }
+    }
+  },
