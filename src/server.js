@@ -8,6 +8,7 @@
   const swaggerDocument = require('../swagger.json');
   const testAddress = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
   const Web3 = require('web3');
+  const path = require('path')
 
   const web3_rinkeby = new Web3(`https://rinkeby.infura.io/v3/${process.env.PROJECT_ID}`);
 
@@ -25,6 +26,7 @@
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
+  app.use('/sdk', express.static(path.join(__dirname + '/public')))
 
 /**
  * 
