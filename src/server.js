@@ -4,10 +4,12 @@
   const bodyParser = require('body-parser');
   const swaggerUi = require('swagger-ui-express');
   const cors = require('cors');
-  const {_formatCoverResponse, _getDistributorsContract} = require('./@brightunion/sdk')
+  const {_formatCoverResponse, _getDistributorsContract,data1} = require('./@brightunion/sdk')
   const swaggerDocument = require('../swagger.json');
   const testAddress = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
+  const Web3 = require('web3');
 
+  const web3_rinkeby = new Web3(`https://rinkeby.infura.io/v3/${process.env.PROJECT_ID}`);
 
   const { 
     getInsuraceCovers,
@@ -28,7 +30,7 @@
  * 
  *       BU PROTOCOL 
  */
-app.route('/v1/protocol/getCovers').post((req, res) => { 
+app.route('/v1/protocol/getCoversDemo').post((req, res) => { 
     let {DistributorName,OwnerAddress,ActiveCover,limit = 20, covers=[], coverFormat=[]} = req.body;
     _getDistributorsContract('insurace')
       .methods.getCovers('insurace',testAddress,true,limit).call()
@@ -36,7 +38,7 @@ app.route('/v1/protocol/getCovers').post((req, res) => {
           coverFormat = coverFormat.concat(_formatCoverResponse('insurace','rinkeby',covers)) })
      
       .then(() => { 
-        _getDistributorsContract('bridge').methods.getCovers('bridge',testAddress,false,limit).call()
+        _getDistributorsContract('bridge').methods.getCovers('bridge',testAddress,true,limit).call()
            .then((covers)  => { 
               coverFormat = coverFormat.concat(_formatCoverResponse('bridge','rinkeby',covers)) })
                
@@ -53,50 +55,55 @@ app.route('/v1/protocol/getCovers').post((req, res) => {
       });
 });
 
- app.route('/v1/protocol/getCoverQuote').post((req, res) => { 
-      let {
-        _distributorName,
-        _interfaceCompliant1,
-        _interfaceCompliant2,
-        _sumAssured,
-        _coverPeriod,
-        _contractAddress,
-        _coverAsset,
-        _nexusCoverable,
-         _data
-      } = req.body;
-  
-      getDistributorsContract(DistributorName)
-              .methods.getQuote(
-                            _distributorName,
-                           _interfaceCompliant1,
-                           _interfaceCompliant2,
-                           _sumAssured,
-                           _coverPeriod,
-                           _contractAddress,
-                           _coverAsset,
-                           _nexusCoverable,
-                            _data
-                    )
-              .call()
-      .then((covers)  => { 
-  
-        covers.forEach(cover =>{
-                        _cover = {}
-                        _cover.coverId = cover[0],
-                        _cover.coverType = cover[1],
-                        _cover.productId = cover[2],
-                        _cover.contractName = cover[3],
-                        _cover.coverAmount = cover[4],
-                        _cover.premium = cover[5]
-                        coverFormat.push(_cover);
-                    });
-                    return res.send(covers);
-            }).catch((error) => {
-              console.error('[protocol-balance] error:', error);
-              return res.sendStatus(400);
-            });;
+app.route('/v1/protocol/getCovers').post((req, res) => { 
+  let {DistributorName,OwnerAddress,ActiveCover,limit = 20, coverFormat=[]} = req.body;
+  let network = DistributorName == 'nexus'? 'kovan':'rinkeby';
+
+  _getDistributorsContract(DistributorName)
+    .methods.getCovers(DistributorName, OwnerAddress, ActiveCover, limit).call()
+    .then((covers)  => {  
+      coverFormat = coverFormat.concat(_formatCoverResponse(DistributorName,network,covers));
+      return res.send(coverFormat);
+          }).catch((error) => {
+            console.error('[protocol-balance] error:', error);
+            return res.sendStatus(400);
+          });
   });
+
+ app.route('/v1/protocol/getCoverQuote').post((req, res) => { 
+  let {
+       DistributorName,
+       Period,
+       AmountInWei,
+       ProductAddress,
+       InterfaceCompliant1,
+       InterfaceCompliant2} = req.body;
+
+    _getDistributorsContract('bridge')
+      .methods.getQuote(
+                    DistributorName,
+                    Period,
+                    web3_rinkeby.utils.toBN(AmountInWei),
+                    ProductAddress,
+                    InterfaceCompliant1,
+                    InterfaceCompliant2,
+                    web3_rinkeby.utils.hexToBytes(web3_rinkeby.utils.numberToHex(500))
+              ).call()
+        .then((q)  => { 
+                let quote = {}
+                quote.distributor = DistributorName;
+                quote.period= Period;
+                quote.price = q[1];
+                quote.totalLiquidity = q[2];
+                quote.totalCoverTokens = q[3];
+                
+                return res.send(quote);
+        }).catch((error) => {
+            console.error('[protocol-balance] error:', error);                      
+     });
+ });
+
+
       
  app.route('/v1/protocol/buyCover').post((req, res) => { 
 
@@ -121,10 +128,6 @@ app.route('/v1/protocol/getCovers').post((req, res) => {
               bytes calldata _interfaceCompliant4
         */
 
-              const data1 = web3_rinkeby.eth.abi.encodeParameters(
-                ['string'],
-                [DistributorName]
-          );
         //       const data = web3_rinkeby.eth.abi.encodeParameters(
         //               ['string',
         //               'address',
@@ -145,45 +148,9 @@ app.route('/v1/protocol/getCovers').post((req, res) => {
         //                 data1
         //               ]
         //         );
-        getDistributorsContract(DistributorName)
-        .methods.buyCover(
-                    DistributorName,
-                    productAddress,
-                    "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
-                    duration, // 26
-                    12,
-                    12,
-                    coverTokens, //"200000000000000000000"
-                    data1
-                ).call()
-                /**
-                 *                address _bridgeProductAddress,
-                                  address _interfaceCompliant1,
-                                  uint256 _durationSeconds,
-                                  uint16 _interfaceCompliant2,
-                                  uint8 _interfaceCompliant3,
-                                  uint256 _coverTokens,
-                                  bytes calldata _interfaceCompliant4
-                 */
-        .then((covers)  => { 
-                  return res.send(covers);
-        }).catch((error) => {
-                console.error('[protocol-balance] error:', error);
-                return res.sendStatus(400);
-        });;
-
-         /*
-            Buy Cover with decoded parameters      INSURACE  
-        */
-            // getDistributorsContract(DistributorName).methods.buyCoverDecode(DistributorName,OwnerAddress,ActiveCover,limit).call()
-            // .then((covers)  => { 
-            // TODO: logic buy insurace
-            //           return res.send(covers);
-            // }).catch((error) => {
-            //         console.error('[protocol-balance] error:', error);
-            //         return res.sendStatus(400);
-            // });;
+      
  });
+
 
 
 

@@ -15,6 +15,27 @@
   "produces": ["application/json"],
 
   "paths": {
+    "/v1/protocol/getCoversDemo": {
+      "post": {
+        "tags": [
+          {
+            "name": "Protocol"
+          }
+        ],    
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Demo to get owner's covers from all distributors across all supported blockchains.",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Cover"
+            }
+          }
+        }
+      }
+    },
     "/v1/protocol/getCovers": {
       "post": {
         "tags": [
@@ -22,7 +43,16 @@
             "name": "Protocol"
           }
         ],
-     
+        "parameters": [
+          {
+            "name": "cover",
+            "in": "body",
+            "description": "Distributor's name",
+            "schema": {
+              "$ref": "#/definitions/coverParams"
+            }
+          }
+        ],
         "produces": [
           "application/json"
         ],
@@ -33,6 +63,24 @@
             "schema": {
               "$ref": "#/definitions/Cover"
             }
+          }
+        }
+      }
+    },
+    "/v1/protocol/getCoverCatalog": {
+      "get": {
+        "tags": [
+          {
+            "name": "Protocol"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "summary": "Get all available covers from Bright Union distributors",
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -50,7 +98,7 @@
             "in": "body",
             "description": "GetCover Quote",
             "schema": {
-              "$ref": "#/definitions/coverParams"
+              "$ref": "#/definitions/quoteParams"
             }
           }
         ],
@@ -75,46 +123,12 @@
             "name": "Protocol"
           }
         ],
-        "parameters": [
-          {
-            "name": "buyCoverParams",
-            "in": "body",
-            "description": "Buy cover!",
-            "schema": {
-              "$ref": "#/definitions/buyCoverParams"
-            }
-          }
-        ],
+
         "produces": [
           "application/json"
         ],
-        "summary": "Get cover from specified distributor",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/buyCoverParams"
-            }
-          }
-        }
-      }
-    },
-    "/v1/protocol/getCoverCatalog": {
-      "get": {
-        "tags": [
-          {
-            "name": "Protocol"
-          }
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "summary": "Get all available covers from Bright Union distributors",
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
+        "summary": "Coming soon..."
+
       }
     }
   } ,
@@ -128,13 +142,55 @@
       "properties": {
         "DistributorName": {
           "type": "string",
-          "uniqueItems": true
+          "uniqueItems": true,
+          "example":"insurace"
         },
         "OwnerAddress": {
-          "type": "string"
+          "type": "string",
+          "example":"0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2"
         },
         "ActiveCover":{
-          "type": "boolean"
+          "type": "boolean",
+          "example":"true"
+        }
+      }
+    },
+    "quoteParams": {
+      "required": [
+        "Period",
+        "AmountInWei",
+        "ProductAddress",
+        "InterfaceCompliant1",
+        "InterfaceCompliant2",
+        "InterfaceCompliant3"
+     
+      ],
+      "properties": {
+        "DistributorName": {
+          "type": "string",
+          "uniqueItems": true,
+          "example": "bridge"
+        },
+        "Period": {
+          "type": "integer",
+          "uniqueItems": true,
+          "example":26
+        },
+        "AmountInWei": {
+          "type": "string",
+          "example":"1000000000000000000000"
+        },
+        "ProductAddress":{
+          "type": "string",
+          "example":"0x85A976045F1dCaEf1279A031934d1DB40d7b0a8f"
+        },
+        "InterfaceCompliant1": {
+          "type": "string",
+          "example":"0x0000000000000000000000000000000000000000"
+        },
+        "InterfaceCompliant2":{
+          "type": "string",
+          "example":"0x0000000000000000000000000000000000000000"
         }
       }
     },
@@ -187,3 +243,5 @@
     }
   }
 }
+
+
