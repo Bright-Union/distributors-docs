@@ -1,5 +1,5 @@
 # Protocol Swagger Documentation
-An api express server for interactive swagger documentation on the BrightUnion protocol.
+BrightUnion protocol.
 
    - Demo:
    [api.brightunion.io/protocol/api-docs](http://api.brightunion.io/protocol/api-docs) 
