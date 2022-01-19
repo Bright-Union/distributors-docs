@@ -1,7 +1,8 @@
 # Distributors-docs
 An api express server for interactive swagger documentation on the BrightUnion protocol.
 
-    - Demo : [api.brightunion.io/protocol/api-docs](http://api.brightunion.io/protocol/api-docs) 
+   - Demo:
+   [api.brightunion.io/protocol/api-docs](http://api.brightunion.io/protocol/api-docs) 
 
 # Bright Union: Distributors
 
