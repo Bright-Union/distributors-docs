@@ -14,7 +14,7 @@ The protocol implements an independent aggregator pattern that allows for seamle
 
 - Supported Blockchains
     - Ethereum main network
-    - Binance Smart Chain
+    - BSC - Binance Smart Chain
     - Polygon
 
 ## Contract components
