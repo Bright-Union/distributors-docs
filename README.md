@@ -1,18 +1,18 @@
 # Bright Union - Distributors Protocol
 
-The BrightUnion protocol is a set of solidity contracts that offer easy integration of crypto assets insurance coverage services from multiple risk platforms. 
+The BrightUnion protocol is a set of solidity contracts that offer easy integration of decentralized risk coverage services from multiple vendors. 
 
 The protocol implements an independent aggregator pattern that allows for seamless onboarding of any new risk platform on a multi-block-chain approach over a hybrid mix of on and off-chain interactions.
 
  - Swagger Documentation:
    [api.brightunion.io/protocol/api-docs](http://api.brightunion.io/protocol/api-docs) 
 
-- Risk platforms currently supported:
-    - Insurace 
-    - DeFiNexus 
-    - MutualBridge Mutual
+- Supported Platforms:
+    - [Insurace](https://www.insurace.io/)
+    - [Nexus Mutual](https://nexusmutual.io/)
+    - [Bridge Mutual](https://bridgemutual.io/)
 
-- The protocol is available to interact with blockchain services on the following  networks and it's respective testing environments:
+- Supported Blockchains
     - Ethereum main network
     - Binance Smart Chain
     - Polygon
