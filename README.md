@@ -1,4 +1,4 @@
-# Distributors-docs
+# Protocol Swagger Documentation
 An api express server for interactive swagger documentation on the BrightUnion protocol.
 
    - Demo:
