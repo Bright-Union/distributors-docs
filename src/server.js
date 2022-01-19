@@ -1,12 +1,12 @@
 
   require('dotenv').config()
   const express = require('express');
+  const {_formatCoverResponse, _getDistributorsContract,data1} = require('./@brightunion/sdk')
   const bodyParser = require('body-parser');
   const swaggerUi = require('swagger-ui-express');
   const cors = require('cors');
-  const {_formatCoverResponse, _getDistributorsContract,data1} = require('./@brightunion/sdk')
   const swaggerDocument = require('../swagger.json');
-  const testAddress = '0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2';
+  const testAddress = process.env.TEST_ACCOUNT;
   const Web3 = require('web3');
   const path = require('path')
 
@@ -105,57 +105,6 @@ app.route('/v1/protocol/getCovers').post((req, res) => {
      });
  });
 
-
-      
- app.route('/v1/protocol/buyCover').post((req, res) => { 
-
-        let { 
-          DistributorName,
-          productAddress,
-              _interfaceCompliant1,
-              duration,
-              _interfaceCompliant2,
-              _interfaceCompliant3,
-              coverTokens,
-            } = req.body;
-    
-        /*
-            Buy Cover     BRIDGE
-              address _bridgeProductAddress,
-              address _interfaceCompliant1,
-              uint256 _durationSeconds,
-              uint16 _interfaceCompliant2,
-              uint8 _interfaceCompliant3,
-              uint256 _coverTokens,
-              bytes calldata _interfaceCompliant4
-        */
-
-        //       const data = web3_rinkeby.eth.abi.encodeParameters(
-        //               ['string',
-        //               'address',
-        //               'address',
-        //               'uint256',
-        //               'uint16',
-        //               'uint8',
-        //               'uint256',
-        //               'bytes'],
-        //               [
-        //                 DistributorName,
-        //                 productAddress,
-        //                 "0x8B13f183e27AaD866b0d71F0CD17ca83A9a54ae2",
-        //                 duration, // 26
-        //                 12,
-        //                 12,
-        //                 coverTokens, //"200000000000000000000"
-        //                 data1
-        //               ]
-        //         );
-      
- });
-
-
-
-
 app.route('/v1/protocol/getCoverCatalog').get((req, res) => {
   let formatCovers = [];
       new Promise(async resolve => {
@@ -221,9 +170,4 @@ app.route('/v1/insurace/confirmCoverPremium').post((req, res) => {
     });
 });
 
-/**
- * 
- *        BRIDGE 
- */
-
-  app.listen(port, () => console.log(`API server running on port ${port}`));
+ app.listen(port, () => console.log(`API server running on port ${port}`));
