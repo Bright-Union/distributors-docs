@@ -1,10 +1,9 @@
-# Protocol Swagger Documentation
-BrightUnion protocol.
+# BrightUnion aggregator protocol documentation
 
    - Demo:
    [api.brightunion.io/protocol/api-docs](http://api.brightunion.io/protocol/api-docs) 
 
-# Bright Union: Distributors
+# Distributors Protocol
 
 The BrightUnion protocol is a set of solidity contracts that offer easy integration of insurance coverage services from multiple risk platforms in a single stop.
 
